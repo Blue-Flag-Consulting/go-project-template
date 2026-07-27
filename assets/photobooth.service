@@ -1,0 +1,32 @@
+[Unit]
+Description=Application Name Description.
+After=network-online.target cups.service media-usb.automount
+Wants=network-online.target cups.service media-usb.automount
+Requires=cups.service
+
+# Allow many retries across a longer window before systemd gives up
+StartLimitIntervalSec=30min
+StartLimitBurst=60
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/aperture/
+User=aperture
+Group=aperture
+
+# Ensure required directories exist on the USB at runtime (idempotent)
+ExecStartPre=/usr/bin/ls /media/usb
+
+# Clean up in case the root had changed the previous permissions of the directory
+ExecStartPre=+/usr/bin/chown -R aperture:aperture /var/lib/aperture
+
+# Your app uses its config from the USB
+ExecStart=/usr/bin/photobooth start --config=/media/usb/config.yaml
+
+# Keep trying on failure; space attempts out; give startup time for slow sticks
+Restart=always
+RestartSec=5s
+TimeoutStartSec=20s
+
+[Install]
+WantedBy=multi-user.target

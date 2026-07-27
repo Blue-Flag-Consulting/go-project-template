@@ -1,0 +1,12 @@
+# should be updated to use the coordinate with the output configuration
+# Example
+/var/log/application.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+    create 0640 root root
+}
