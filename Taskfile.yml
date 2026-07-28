@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+vars:
+  #TODO: change the APPNAME
+  APPNAME: NewApp
+  VERSION:
+    sh: git describe --tags --always --dirty 2>/dev/null || echo "dev"
+  SHORT_COMMIT:
+    sh: git rev-parse --short HEAD 2>/dev/null || echo "unknown"
+  FULL_COMMIT:
+    sh: git rev-parse HEAD 2>/dev/null || echo "unknown"
+  BUILD_TIME:
+    sh: date -u +'%Y-%m-%dT%H:%M:%SZ'
+
+tasks:
+  default:
+    desc: Build the main executable with embedded metadata.
+    cmds:
+      - >
+        go build -ldflags="
+        -X 'main.buildTime={{.BUILD_TIME}}'
+        -X 'main.shortCommit={{.SHORT_COMMIT}}'
+        -X 'main.fullCommit={{.FULL_COMMIT}}'
+        -X 'main.versionTag={{.VERSION}}'
+        " -o build/{{.APPNAME}} ./cmd/app
+    silent: true

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"go-project-template/internal/logger"
 	"os"
 
 	"github.com/charmbracelet/fang"
@@ -14,7 +15,7 @@ const appName = "NewApp"
 func main() {
 	cmd := cli(App)
 
-	if err := fang.Execute(context.Background(), cmd); err != nil {
+	if err := fang.Execute(context.Background(), cmd, fang.WithVersion(StyledVersionInfo())); err != nil {
 		os.Exit(1)
 	}
 	os.Exit(0)
@@ -22,7 +23,8 @@ func main() {
 
 // App will be invoked by the CLI.
 func App() error {
-	fmt.Println("Hello World!")
+	log := logger.PrettyLogger(&loglevel)
+	log.Info("hello world")
 	fmt.Println(configFile)
 	return nil
 }
