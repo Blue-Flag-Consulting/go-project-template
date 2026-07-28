@@ -1,3 +1,7 @@
+### Build Atrifacts
+build/
+dist/
+
 ### TaskFile
 .task/
 
