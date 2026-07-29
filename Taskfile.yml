@@ -28,7 +28,6 @@ tasks:
   both:
     desc: Default to running the local dev build environment.
     cmds:
-      - echo "building both dev and prod"
       - task: dev
       - task: prod
     silent: true
@@ -36,6 +35,7 @@ tasks:
   dev:
     desc: Build the executable for local development with debugging symbols and dev tags.
     cmds:
+      - echo "compiling DEVELOPMENT build"
       - >
         go build 
         -tags dev 
@@ -51,10 +51,20 @@ tasks:
 #      GOOS: 'linux'
 #      GOARCH: 'amd64'
     cmds:
+      - echo "compiling PRODUCTION build"
+      - go mod tidy
+      - go mod verify
       - >
         go build 
         -tags prod
         -ldflags="-w -s {{.BASE_LDFLAGS}}" 
         -o build/{{.APP_NAME}} 
         ./cmd/app
+    silent: true
+
+  update:
+    desc: Update the project dependencies
+    cmds:
+      - go get -u -t ./...
+      - go mod tidy
     silent: true
