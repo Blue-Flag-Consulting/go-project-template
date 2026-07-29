@@ -27,6 +27,7 @@ func cli(app Application) *cobra.Command {
 			return app()
 		},
 	}
+	// removes the default "Version is {{.Version}}" style.
 	rootCmd.SetVersionTemplate("{{.Version}}")
 
 	// PersistentFlags makes them available to this command and any sub-commands you might add later

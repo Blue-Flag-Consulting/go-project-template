@@ -10,3 +10,24 @@
     copytruncate
     create 0640 root root
 }
+
+# rotate 7
+# Retention: Keeps up to 7 rotated log files (roughly 1 week of history) before automatically deleting the oldest one.
+
+# compress
+# Compression: Compresses old log files using gzip to save disk space.
+
+# delaycompress
+#Delayed Compression: Waits until the next rotation cycle to compress the most recently rotated file. This leaves yesterday's log (application.log.1) uncompressed so ongoing writes or processes with open file handles don't break. Older logs (.2.gz through .7.gz) remain compressed.
+
+# missingok
+# Error Handling: Ignores missing files. If the log file doesn't exist, logrotate moves on without raising an error.
+
+# notifempty
+# Skip Empty: Skips rotation if the log file is 0 bytes.
+
+# copytruncate
+# In-Place Truncation: Copies the current log file to a backup and then clears (truncates) the original file in place. This allows continuous writing without needing to restart the application or send a SIGHUP signal to reopen file handles.
+
+# create 0640 root root
+# Permissions/Ownership: Ensures any newly created log file has permissions 0640 (read/write for owner, read-only for group, none for others), owned by user "root" and group "root". Note that because copytruncate is used, this mainly acts as a fallback or default setting.

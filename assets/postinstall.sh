@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-SERVICE_NAME="photobooth.service"
+SERVICE_NAME="application.service"
 MOUNT="media-usb.mount"
 AUTOMOUNT="media-usb.automount"
 USER="aperture"

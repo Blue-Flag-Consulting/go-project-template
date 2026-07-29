@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"go-project-template/internal/logger"
 	"os"
 
 	"github.com/charmbracelet/fang"
@@ -23,8 +21,6 @@ func main() {
 
 // App will be invoked by the CLI.
 func App() error {
-	log := logger.PrettyLogger(&loglevel)
-	log.Info("hello world")
-	fmt.Println(configFile)
+	log.Info("starting app...")
 	return nil
 }

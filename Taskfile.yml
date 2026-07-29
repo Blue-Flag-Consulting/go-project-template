@@ -1,9 +1,8 @@
-# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: '3'
 
 vars:
-  #TODO: change the APPNAME
-  APPNAME: NewApp
+  #TODO: change the APP_NAME
+  APP_NAME: NewApp
   VERSION:
     sh: git describe --tags --always --dirty 2>/dev/null || echo "dev"
   SHORT_COMMIT:
@@ -13,15 +12,49 @@ vars:
   BUILD_TIME:
     sh: date -u +'%Y-%m-%dT%H:%M:%SZ'
 
+  # Base ldflags shared by both environments
+  BASE_LDFLAGS: >-
+    -X 'main.buildTime={{.BUILD_TIME}}'
+    -X 'main.shortCommit={{.SHORT_COMMIT}}'
+    -X 'main.fullCommit={{.FULL_COMMIT}}'
+    -X 'main.versionTag={{.VERSION}}'
+
 tasks:
   default:
-    desc: Build the main executable with embedded metadata.
+    desc: Default to running the local dev build environment.
+    cmds:
+      - task: dev
+
+  both:
+    desc: Default to running the local dev build environment.
+    cmds:
+      - echo "building both dev and prod"
+      - task: dev
+      - task: prod
+    silent: true
+
+  dev:
+    desc: Build the executable for local development with debugging symbols and dev tags.
     cmds:
       - >
-        go build -ldflags="
-        -X 'main.buildTime={{.BUILD_TIME}}'
-        -X 'main.shortCommit={{.SHORT_COMMIT}}'
-        -X 'main.fullCommit={{.FULL_COMMIT}}'
-        -X 'main.versionTag={{.VERSION}}'
-        " -o build/{{.APPNAME}} ./cmd/app
+        go build 
+        -tags dev 
+        -ldflags="{{.BASE_LDFLAGS}}" 
+        -o build/{{.APP_NAME}}-dev 
+        ./cmd/app
+    silent: true
+
+  prod:
+    desc: Build a stripped, cross-compiled, statically linked production binary.
+    env:
+      CGO_ENABLED: '0'
+#      GOOS: 'linux'
+#      GOARCH: 'amd64'
+    cmds:
+      - >
+        go build 
+        -tags prod
+        -ldflags="-w -s {{.BASE_LDFLAGS}}" 
+        -o build/{{.APP_NAME}} 
+        ./cmd/app
     silent: true

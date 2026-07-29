@@ -19,11 +19,11 @@ builds:
       - -X 'main.version={{.Version}}'
     flags:
       - -trimpath
-    env:
-      - CGO_ENABLED=0
-      - GOARM64=v8.2
-    goos: [ linux ]
-    goarch: [ arm64 ]
+#    env:
+#      - CGO_ENABLED=0
+#      - GOARM64=v8.2
+#    goos: [ linux ]
+#    goarch: [ arm64 ]
 
 # https://nfpm.goreleaser.com/configuration/
 # https://goreleaser.com/customization/nfpm/
@@ -42,24 +42,18 @@ nfpms:
 #      - libssl-dev
     bindir: /usr/bin
     contents:
-      - src: ./assets/logrotate
-        dst: /etc/logrotate.d/photobooth
-      - src: ./assets/photobooth.service
-        dst: /usr/lib/systemd/system/photobooth.service
-      - src: ./assets/gitlab_project.list
-        dst: /etc/apt/sources.list.d/gitlab_project.list
-      - src: ./assets/bookworm-archive-keyring.gpg
-        dst: /usr/local/share/keyrings/bookworm-archive-keyring.gpg
-      - src: ./assets/gitlab_auth.conf
-        dst: /etc/apt/auth.conf.d/gitlab_project.conf
-      - src: ./configuration/example-config.yaml
-        dst: /etc/aperture/config.yaml
-        type: config|noreplace
-    scripts:
-      preinstall: assets/preinstall.sh
-      postinstall: assets/postinstall.sh
-      preremove: assets/preremove.sh
-      postremove: assets/postremove.sh
+#      - src: ./assets/logrotate
+#        dst: /etc/logrotate.d/photobooth
+#      - src: ./assets/application.service
+#        dst: /usr/lib/systemd/system/application.service
+#      - src: ./configuration/example-config.yaml
+#        dst: /etc/aperture/config.yaml
+#        type: config|noreplace
+#    scripts:
+#      preinstall: assets/preinstall.sh
+#      postinstall: assets/postinstall.sh
+#      preremove: assets/preremove.sh
+#      postremove: assets/postremove.sh
 
 gitlab_urls:
   api: https://gitlab.jeremyforan.com/api/v4/
