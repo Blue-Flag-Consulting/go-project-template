@@ -22,5 +22,6 @@ func main() {
 // App will be invoked by the CLI.
 func App() error {
 	log.Info("starting app...")
+	log.Info("starting app...")
 	return nil
 }
